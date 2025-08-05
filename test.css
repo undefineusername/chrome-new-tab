@@ -1,0 +1,1616 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: #1a1a1a;
+    color: #e0e0e0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  /* 라이트 테마 */
+  body.light-theme {
+    background: #f5f5f5;
+    color: #333333;
+  }
+  
+  body.light-theme .search-box {
+    background: #ffffff;
+    border-color: #e0e0e0;
+    color: #333333;
+  }
+  
+  body.light-theme .search-box:focus {
+    border-color: #4285f4;
+    background: #ffffff;
+  }
+  
+  body.light-theme .search-btn {
+    background: #f8f9fa;
+    color: #5f6368;
+  }
+  
+  body.light-theme .search-btn:hover {
+    background: #e8eaed;
+  }
+  
+  body.light-theme .side-panel {
+    border-color: #e0e0e0;
+  }
+  
+  body.light-theme .workout-panel {
+    border-right-color: #e0e0e0;
+  }
+  
+  body.light-theme .todo-panel {
+    border-left-color: #e0e0e0;
+  }
+  
+  body.light-theme .panel-title {
+    color: #5f6368;
+  }
+  
+  body.light-theme .day-category {
+    color: #5f6368;
+    border-color: #e0e0e0;
+  }
+  
+  body.light-theme .exercise-item {
+    border-bottom-color: #e0e0e0;
+  }
+  
+  body.light-theme .exercise-checkbox {
+    background: #ffffff;
+    border-color: #dadce0;
+  }
+  
+  body.light-theme .exercise-checkbox:hover {
+    border-color: #4285f4;
+    background: #f8f9fa;
+  }
+  
+  body.light-theme .exercise-checkbox:checked {
+    background: #4285f4;
+    border-color: #4285f4;
+  }
+  
+  body.light-theme .exercise-checkbox:checked::after {
+    color: #ffffff;
+  }
+  
+  body.light-theme .exercise-name {
+    color: #333333;
+  }
+  
+  body.light-theme .exercise-reps {
+    color: #5f6368;
+  }
+  
+  body.light-theme .progress-bar {
+    background: #e0e0e0;
+  }
+  
+  body.light-theme .progress-fill {
+    background: #4285f4;
+  }
+  
+  body.light-theme .progress-text {
+    color: #5f6368;
+  }
+  
+  body.light-theme .todo-input {
+    border-color: #e0e0e0;
+    color: #333333;
+  }
+  
+  body.light-theme .todo-input:focus {
+    border-color: #4285f4;
+  }
+  
+  body.light-theme .add-btn {
+    border-color: #e0e0e0;
+    color: #5f6368;
+  }
+  
+  body.light-theme .add-btn:hover {
+    border-color: #4285f4;
+    background: #f8f9fa;
+  }
+  
+  body.light-theme .todo-item {
+    border-bottom-color: #e0e0e0;
+  }
+  
+  body.light-theme .todo-checkbox {
+    background: #ffffff;
+    border-color: #dadce0;
+  }
+  
+  body.light-theme .todo-checkbox:hover {
+    border-color: #4285f4;
+    background: #f8f9fa;
+  }
+  
+  body.light-theme .todo-checkbox:checked {
+    background: #4285f4;
+    border-color: #4285f4;
+  }
+  
+  body.light-theme .todo-checkbox:checked::after {
+    color: #ffffff;
+  }
+  
+  body.light-theme .todo-text {
+    color: #333333;
+  }
+  
+  body.light-theme .delete-btn {
+    color: #5f6368;
+  }
+  
+  body.light-theme .delete-btn:hover {
+    background: #f8f9fa;
+    color: #ea4335;
+  }
+  
+  /* 메인 컨테이너 */
+  .main-container {
+    flex: 1;
+    display: flex;
+    position: relative;
+  }
+  
+  /* 중앙 섹션 */
+  .center-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    padding-top: 60px;
+    position: relative;
+  }
+  
+  .time-container {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  
+  .main-time {
+    font-size: 6rem;
+    font-weight: 300;
+    color: #ffffff;
+    margin-bottom: 8px;
+    font-family: "Segoe UI", sans-serif;
+    letter-spacing: -2px;
+  }
+  
+  body.light-theme .main-time {
+    color: #333333;
+  }
+  
+  .main-date {
+    font-size: 1.4rem;
+    color: #b0b0b0;
+    font-weight: 300;
+  }
+  
+  body.light-theme .main-date {
+    color: #5f6368;
+  }
+  
+  /* 검색 컨테이너 */
+  .search-container {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 40px;
+  }
+  
+  .search-box {
+    width: 100%;
+    padding: 18px 55px 18px 25px;
+    font-size: 1.2rem;
+    background: #2d2d2d;
+    border: 2px solid #404040;
+    border-radius: 30px;
+    color: #ffffff;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+  
+  .search-box:focus {
+    border-color: #666666;
+    background: #333333;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+  }
+  
+  .search-box::placeholder {
+    color: #888888;
+  }
+  
+  body.light-theme .search-box::placeholder {
+    color: #9aa0a6;
+  }
+  
+  .search-btn {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #404040;
+    border: none;
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    color: #ffffff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+  }
+  
+  .search-btn:hover {
+    background: #555555;
+  }
+  
+  /* 바로가기 컨테이너 */
+  .shortcuts-container {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 40px;
+  }
+  
+  .shortcuts-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    justify-items: center;
+  }
+  
+  .shortcut-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 12px;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    position: relative;
+    min-width: 80px;
+  }
+  
+  .shortcut-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+  }
+  
+  body.light-theme .shortcut-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+  
+  .shortcut-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    font-size: 24px;
+    transition: transform 0.2s ease;
+  }
+  
+  .shortcut-item:hover .shortcut-icon {
+    transform: scale(1.1);
+  }
+  
+  .add-icon {
+    background: #404040 !important;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  body.light-theme .add-icon {
+    background: #e0e0e0 !important;
+    color: #5f6368;
+  }
+  
+  .shortcut-name {
+    font-size: 0.85rem;
+    color: #e0e0e0;
+    text-align: center;
+    max-width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  body.light-theme .shortcut-name {
+    color: #333333;
+  }
+  
+  .shortcut-delete {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .shortcut-item:hover .shortcut-delete {
+    opacity: 1;
+  }
+  
+  .shortcut-delete:hover {
+    background: #ff4757;
+  }
+  
+  /* 날씨 위젯 위치 조정 */
+  .weather-widget {
+    position: absolute;
+    bottom: 120px; /* 30px에서 120px로 변경 */
+    left: 30px;
+    cursor: pointer;
+    padding: 14px 16px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    min-width: 200px;
+    opacity: 0.7;
+    animation: fadeInWidget 1.5s ease 0.5s forwards;
+  }
+  
+  body.light-theme .weather-widget {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+  }
+  
+  .weather-widget:hover {
+    opacity: 1 !important;
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+  }
+  
+  body.light-theme .weather-widget:hover {
+    background: rgba(255, 255, 255, 0.95);
+  }
+  
+  .weather-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  
+  .weather-icon {
+    font-size: 1.4rem;
+  }
+  
+  .weather-temp {
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: #ffffff;
+  }
+  
+  body.light-theme .weather-temp {
+    color: #333333;
+  }
+  
+  .weather-desc {
+    font-size: 0.9rem;
+    color: #b0b0b0;
+    margin-left: 4px;
+  }
+  
+  body.light-theme .weather-desc {
+    color: #5f6368;
+  }
+  
+  .weather-details {
+    display: flex;
+    gap: 12px;
+    font-size: 0.75rem;
+    color: #888888;
+    margin-top: 6px;
+  }
+  
+  body.light-theme .weather-details {
+    color: #5f6368;
+  }
+  
+  .weather-detail {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  
+  .weather-detail-icon {
+    font-size: 0.8rem;
+  }
+  
+  @keyframes fadeInWidget {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 0.7;
+      transform: translateY(0);
+    }
+  }
+  
+  /* 설정 버튼 */
+  .settings-btn {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    width: 44px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.6;
+    backdrop-filter: blur(10px);
+  }
+  
+  body.light-theme .settings-btn {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #5f6368;
+  }
+  
+  .settings-btn:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.08);
+    transform: rotate(90deg);
+  }
+  
+  body.light-theme .settings-btn:hover {
+    background: rgba(255, 255, 255, 0.95);
+  }
+  
+  /* 사이드 패널 공통 스타일 */
+  .side-panel {
+    width: 280px;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+  }
+  
+  .side-panel:hover {
+    opacity: 1;
+  }
+  
+  .panel-title {
+    font-size: 1.1rem;
+    color: #b0b0b0;
+    margin-bottom: 20px;
+    font-weight: 400;
+    text-align: center;
+  }
+  
+  /* 왼쪽 운동 패널 */
+  .workout-panel {
+    border-right: 1px solid #333333;
+  }
+  
+  .workout-content {
+    flex: 1;
+    overflow-y: auto;
+  }
+  
+  .day-info {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+  
+  .day-name {
+    font-size: 1rem;
+    color: #ffffff;
+    margin-bottom: 4px;
+    font-weight: 400;
+  }
+  
+  body.light-theme .day-name {
+    color: #333333;
+  }
+  
+  .day-category {
+    display: inline-block;
+    color: #888888;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    border: 1px solid #444444;
+  }
+  
+  .exercise-list {
+    list-style: none;
+  }
+  
+  .exercise-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #333333;
+    transition: all 0.2s ease;
+  }
+  
+  .exercise-item:last-child {
+    border-bottom: none;
+  }
+  
+  .exercise-item:hover {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 4px;
+    padding-left: 6px;
+  }
+  
+  body.light-theme .exercise-item:hover {
+    background: rgba(0, 0, 0, 0.03);
+  }
+  
+  /* 체크박스 스타일 */
+  .exercise-checkbox {
+    width: 14px;
+    height: 14px;
+    margin-right: 10px;
+    cursor: pointer;
+    appearance: none;
+    background: #2d2d2d;
+    border: 1px solid #555555;
+    border-radius: 2px;
+    position: relative;
+    transition: all 0.2s ease;
+  }
+  
+  .exercise-checkbox:hover {
+    border-color: #666666;
+    background: #333333;
+  }
+  
+  .exercise-checkbox:checked {
+    background: #404040;
+    border-color: #666666;
+  }
+  
+  .exercise-checkbox:checked::after {
+    content: "✓";
+    position: absolute;
+    top: -2px;
+    left: 1px;
+    color: #b0b0b0;
+    font-size: 10px;
+    font-weight: bold;
+  }
+  
+  .exercise-name {
+    flex: 1;
+    font-size: 0.85rem;
+    color: #e0e0e0;
+    font-weight: 400;
+  }
+  
+  .exercise-reps {
+    color: #888888;
+    font-size: 0.7rem;
+    text-align: right;
+  }
+  
+  .exercise-item.completed .exercise-name,
+  .exercise-item.completed .exercise-reps {
+    opacity: 0.4;
+    text-decoration: line-through;
+  }
+  
+  .progress-bar {
+    margin-top: 15px;
+    background: #333333;
+    height: 3px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: #666666;
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 2px;
+  }
+  
+  .progress-text {
+    text-align: center;
+    margin-top: 6px;
+    color: #888888;
+    font-size: 0.7rem;
+  }
+  
+  .rest-day {
+    text-align: center;
+    padding: 30px 10px;
+  }
+  
+  .rest-day h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  
+  .rest-day h3 {
+    font-size: 1rem;
+    color: #ffffff;
+    margin-bottom: 8px;
+    font-weight: 300;
+  }
+  
+  body.light-theme .rest-day h3 {
+    color: #333333;
+  }
+  
+  .rest-day p {
+    color: #888888;
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+  
+  body.light-theme .rest-day p {
+    color: #5f6368;
+  }
+  
+  /* 오른쪽 할일 패널 */
+  .todo-panel {
+    border-left: 1px solid #333333;
+  }
+  
+  .todo-input-container {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 15px;
+  }
+  
+  .todo-input {
+    flex: 1;
+    padding: 8px 10px;
+    background: transparent;
+    border: 1px solid #444444;
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 0.8rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .todo-input:focus {
+    border-color: #666666;
+  }
+  
+  .todo-input::placeholder {
+    color: #666666;
+  }
+  
+  body.light-theme .todo-input::placeholder {
+    color: #9aa0a6;
+  }
+  
+  .add-btn {
+    padding: 8px 12px;
+    background: transparent;
+    border: 1px solid #444444;
+    border-radius: 6px;
+    color: #b0b0b0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.8rem;
+  }
+  
+  .add-btn:hover {
+    border-color: #666666;
+    background: #333333;
+  }
+  
+  .todo-list {
+    flex: 1;
+    overflow-y: auto;
+  }
+  
+  .todo-item {
+    display: flex;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid #333333;
+    transition: all 0.2s ease;
+  }
+  
+  .todo-item:last-child {
+    border-bottom: none;
+  }
+  
+  .todo-item:hover {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 4px;
+    padding-left: 6px;
+  }
+  
+  body.light-theme .todo-item:hover {
+    background: rgba(0, 0, 0, 0.03);
+  }
+  
+  .todo-checkbox {
+    width: 14px;
+    height: 14px;
+    margin-right: 10px;
+    cursor: pointer;
+    appearance: none;
+    background: #2d2d2d;
+    border: 1px solid #555555;
+    border-radius: 2px;
+    position: relative;
+    transition: all 0.2s ease;
+  }
+  
+  .todo-checkbox:hover {
+    border-color: #666666;
+    background: #333333;
+  }
+  
+  .todo-checkbox:checked {
+    background: #404040;
+    border-color: #666666;
+  }
+  
+  .todo-checkbox:checked::after {
+    content: "✓";
+    position: absolute;
+    top: -2px;
+    left: 1px;
+    color: #b0b0b0;
+    font-size: 10px;
+    font-weight: bold;
+  }
+  
+  .todo-text {
+    flex: 1;
+    color: #e0e0e0;
+    font-size: 0.85rem;
+    word-break: break-word;
+    line-height: 1.3;
+  }
+  
+  .todo-item.completed .todo-text {
+    opacity: 0.4;
+    text-decoration: line-through;
+  }
+  
+  .delete-btn {
+    background: none;
+    border: none;
+    color: #666666;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 3px;
+    opacity: 0;
+    transition: all 0.2s ease;
+    font-size: 0.7rem;
+  }
+  
+  .todo-item:hover .delete-btn {
+    opacity: 1;
+  }
+  
+  .delete-btn:hover {
+    background: #333333;
+    color: #ff6b6b;
+  }
+  
+  /* 모달 스타일 */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+  }
+  
+  .modal-content {
+    background: #2d2d2d;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+  
+  body.light-theme .modal-content {
+    background: #ffffff;
+    color: #333333;
+  }
+  
+  .modal-content h3 {
+    margin-bottom: 20px;
+    color: #ffffff;
+    text-align: center;
+  }
+  
+  body.light-theme .modal-content h3 {
+    color: #333333;
+  }
+  
+  .modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .modal-form input {
+    padding: 12px;
+    background: #1a1a1a;
+    border: 1px solid #404040;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  body.light-theme .modal-form input {
+    background: #f8f9fa;
+    border-color: #e0e0e0;
+    color: #333333;
+  }
+  
+  .modal-form input:focus {
+    border-color: #666666;
+  }
+  
+  body.light-theme .modal-form input:focus {
+    border-color: #4285f4;
+  }
+  
+  .modal-form input::placeholder {
+    color: #888888;
+  }
+  
+  body.light-theme .modal-form input::placeholder {
+    color: #9aa0a6;
+  }
+  
+  .modal-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+  
+  .modal-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+  }
+  
+  .modal-buttons button:first-child {
+    background: transparent;
+    color: #888888;
+    border: 1px solid #404040;
+  }
+  
+  body.light-theme .modal-buttons button:first-child {
+    color: #5f6368;
+    border-color: #e0e0e0;
+  }
+  
+  .modal-buttons button:first-child:hover {
+    background: #333333;
+    border-color: #666666;
+  }
+  
+  body.light-theme .modal-buttons button:first-child:hover {
+    background: #f8f9fa;
+    border-color: #4285f4;
+  }
+  
+  .modal-buttons button.primary {
+    background: #4285f4;
+    color: #ffffff;
+  }
+  
+  .modal-buttons button.primary:hover {
+    background: #3367d6;
+  }
+  
+  /* 설정 패널 */
+  .settings-panel {
+    position: fixed;
+    top: 0;
+    right: -350px;
+    width: 350px;
+    height: 100%;
+    background: #2d2d2d;
+    border-left: 1px solid #404040;
+    transition: right 0.3s ease;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  body.light-theme .settings-panel {
+    background: #ffffff;
+    border-left-color: #e0e0e0;
+  }
+  
+  .settings-panel.active {
+    right: 0;
+  }
+  
+  .settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #404040;
+  }
+  
+  body.light-theme .settings-header {
+    border-bottom-color: #e0e0e0;
+  }
+  
+  .settings-header h3 {
+    color: #ffffff;
+    margin: 0;
+  }
+  
+  body.light-theme .settings-header h3 {
+    color: #333333;
+  }
+  
+  .settings-header button {
+    background: none;
+    border: none;
+    color: #888888;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+  }
+  
+  body.light-theme .settings-header button {
+    color: #5f6368;
+  }
+  
+  .settings-header button:hover {
+    background: #404040;
+    color: #ffffff;
+  }
+  
+  body.light-theme .settings-header button:hover {
+    background: #f8f9fa;
+    color: #333333;
+  }
+  
+  .settings-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  .setting-item {
+    margin-bottom: 20px;
+  }
+  
+  .setting-item label {
+    display: block;
+    color: #b0b0b0;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+  }
+  
+  body.light-theme .setting-item label {
+    color: #5f6368;
+  }
+  
+  .setting-item select,
+  .setting-item input {
+    width: 100%;
+    padding: 10px;
+    background: #1a1a1a;
+    border: 1px solid #404040;
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  body.light-theme .setting-item select,
+  body.light-theme .setting-item input {
+    background: #f8f9fa;
+    border-color: #e0e0e0;
+    color: #333333;
+  }
+  
+  .setting-item select:focus,
+  .setting-item input:focus {
+    border-color: #666666;
+  }
+  
+  body.light-theme .setting-item select:focus,
+  body.light-theme .setting-item input:focus {
+    border-color: #4285f4;
+  }
+  
+  .setting-item select::placeholder,
+  .setting-item input::placeholder {
+    color: #888888;
+  }
+  
+  body.light-theme .setting-item select::placeholder,
+  body.light-theme .setting-item input::placeholder {
+    color: #9aa0a6;
+  }
+  
+  .danger-btn {
+    width: 100%;
+    padding: 12px;
+    background: #ff4757;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.3s ease;
+  }
+  
+  .danger-btn:hover {
+    background: #ff3742;
+  }
+  
+  /* 스크롤바 스타일 */
+  .workout-content::-webkit-scrollbar,
+  .todo-list::-webkit-scrollbar,
+  .settings-content::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  .workout-content::-webkit-scrollbar-track,
+  .todo-list::-webkit-scrollbar-track,
+  .settings-content::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .workout-content::-webkit-scrollbar-thumb,
+  .todo-list::-webkit-scrollbar-thumb,
+  .settings-content::-webkit-scrollbar-thumb {
+    background: #444444;
+    border-radius: 2px;
+  }
+  
+  body.light-theme .workout-content::-webkit-scrollbar-thumb,
+  body.light-theme .todo-list::-webkit-scrollbar-thumb,
+  body.light-theme .settings-content::-webkit-scrollbar-thumb {
+    background: #dadce0;
+  }
+  
+  .workout-content::-webkit-scrollbar-thumb:hover,
+  .todo-list::-webkit-scrollbar-thumb:hover,
+  .settings-content::-webkit-scrollbar-thumb:hover {
+    background: #555555;
+  }
+  
+  body.light-theme .workout-content::-webkit-scrollbar-thumb:hover,
+  body.light-theme .todo-list::-webkit-scrollbar-thumb:hover,
+  body.light-theme .settings-content::-webkit-scrollbar-thumb:hover {
+    background: #bdc1c6;
+  }
+  
+  /* 반응형 디자인 */
+  @media (max-width: 1200px) {
+    .side-panel {
+      width: 240px;
+    }
+  
+    .shortcuts-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+  }
+  
+  @media (max-width: 1024px) {
+    .main-container {
+      flex-direction: column;
+    }
+  
+    .center-section {
+      flex: 1;
+      padding: 30px 20px;
+      padding-top: 40px;
+    }
+  
+    .time-container {
+      margin-bottom: 30px;
+    }
+  
+    .main-time {
+      font-size: 4rem;
+    }
+  
+    .main-date {
+      font-size: 1.2rem;
+    }
+  
+    .weather-widget {
+      bottom: 80px;
+      left: 15px;
+      min-width: 180px;
+      font-size: 0.9rem;
+      padding: 12px 14px;
+    }
+  
+    .weather-temp {
+      font-size: 1.2rem;
+    }
+  
+    .weather-icon {
+      font-size: 1.3rem;
+    }
+  
+    .settings-btn {
+      bottom: 15px;
+      right: 15px;
+      width: 40px;
+      height: 40px;
+    }
+  
+    .side-panel {
+      width: 100%;
+      flex-direction: row;
+      padding: 15px 20px;
+      border: none;
+      border-top: 1px solid #333333;
+    }
+  
+    body.light-theme .side-panel {
+      border-top-color: #e0e0e0;
+    }
+  
+    .workout-panel {
+      border-right: 1px solid #333333;
+      border-bottom: none;
+    }
+  
+    body.light-theme .workout-panel {
+      border-right-color: #e0e0e0;
+    }
+  
+    .todo-panel {
+      border-left: none;
+      border-bottom: none;
+    }
+  
+    .shortcuts-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+  
+    .settings-panel {
+      width: 100%;
+      right: -100%;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .main-time {
+      font-size: 3rem;
+    }
+  
+    .search-box {
+      padding: 15px 50px 15px 20px;
+      font-size: 1rem;
+    }
+  
+    .search-btn {
+      width: 38px;
+      height: 38px;
+    }
+  
+    .side-panel {
+      flex-direction: column;
+      padding: 15px;
+    }
+  
+    .workout-panel {
+      border-right: none;
+      border-bottom: 1px solid #333333;
+      margin-bottom: 15px;
+    }
+  
+    body.light-theme .workout-panel {
+      border-bottom-color: #e0e0e0;
+    }
+  
+    .weather-widget {
+      bottom: 70px;
+      left: 10px;
+      min-width: 160px;
+      font-size: 0.8rem;
+      padding: 10px 12px;
+    }
+  
+    .weather-temp {
+      font-size: 1.1rem;
+    }
+  
+    .weather-icon {
+      font-size: 1.2rem;
+    }
+  
+    .weather-details {
+      gap: 10px;
+      font-size: 0.7rem;
+    }
+  
+    .settings-btn {
+      bottom: 10px;
+      right: 10px;
+      width: 36px;
+      height: 36px;
+    }
+  
+    .shortcuts-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+  
+    .shortcut-icon {
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+    }
+  
+    .shortcut-name {
+      font-size: 0.8rem;
+      max-width: 60px;
+    }
+  
+    .modal-content {
+      width: 95%;
+      padding: 20px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .center-section {
+      padding: 20px 15px;
+      padding-top: 30px;
+    }
+  
+    .main-time {
+      font-size: 2.5rem;
+    }
+  
+    .main-date {
+      font-size: 1rem;
+    }
+  
+    .search-container {
+      margin-bottom: 30px;
+    }
+  
+    .shortcuts-container {
+      margin-bottom: 30px;
+    }
+  
+    .shortcuts-grid {
+      gap: 10px;
+    }
+  
+    .shortcut-icon {
+      width: 36px;
+      height: 36px;
+      font-size: 18px;
+    }
+  
+    .shortcut-name {
+      font-size: 0.75rem;
+      max-width: 50px;
+    }
+  
+    .weather-widget {
+      position: relative;
+      bottom: 190px;
+      left: auto;
+      margin-top: 20px;
+      min-width: auto;
+      width: 100%;
+      max-width: 300px;
+    }
+  
+    .settings-btn {
+      position: relative;
+      bottom: auto;
+      right: auto;
+      margin-top: 15px;
+    }
+  }
+  
+  /* 🎵 MP3 플레이어 위젯 */
+  .music-widget {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    cursor: pointer;
+    padding: 14px 16px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    min-width: 280px;
+    opacity: 0.7;
+    animation: fadeInWidget 1.5s ease 0.3s forwards;
+  }
+  
+  body.light-theme .music-widget {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+  }
+  
+  .music-widget:hover {
+    opacity: 1 !important;
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+  }
+  
+  body.light-theme .music-widget:hover {
+    background: rgba(255, 255, 255, 0.95);
+  }
+  
+  .music-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  
+  .music-icon {
+    font-size: 1.4rem;
+  }
+  
+  .music-title {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #ffffff;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 180px;
+  }
+  
+  body.light-theme .music-title {
+    color: #333333;
+  }
+  
+  .music-play-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+  }
+  
+  .music-play-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  body.light-theme .music-play-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+  }
+  
+  .music-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: #888888;
+  }
+  
+  body.light-theme .music-controls {
+    color: #5f6368;
+  }
+  
+  .music-control-btn {
+    background: none;
+    border: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    opacity: 0.7;
+  }
+  
+  .music-control-btn:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  body.light-theme .music-control-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+  }
+  
+  .music-progress {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .progress-track {
+    height: 3px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  
+  body.light-theme .progress-track {
+    background: rgba(0, 0, 0, 0.2);
+  }
+  
+  .progress-bar-music {
+    height: 100%;
+    background: #ffffff;
+    width: 0%;
+    transition: width 0.1s ease;
+    border-radius: 2px;
+  }
+  
+  body.light-theme .progress-bar-music {
+    background: #4285f4;
+  }
+  
+  .music-time {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: #888888;
+  }
+  
+  body.light-theme .music-time {
+    color: #5f6368;
+  }
+  
+  .music-upload-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: none;
+    border: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    opacity: 0.6;
+    transition: all 0.2s ease;
+  }
+  
+  .music-upload-btn:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  
+  body.light-theme .music-upload-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+  }
+  
+  /* 반응형 조정 */
+  @media (max-width: 1024px) {
+    .weather-widget {
+      bottom: 150px;
+      left: 15px;
+    }
+  
+    .music-widget {
+      bottom: 15px;
+      left: 15px;
+      min-width: 250px;
+      font-size: 0.9rem;
+      padding: 12px 14px;
+    }
+  
+    .music-title {
+      font-size: 0.9rem;
+      max-width: 150px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .weather-widget {
+      bottom: 140px;
+      left: 10px;
+    }
+  
+    .music-widget {
+      bottom: 10px;
+      left: 10px;
+      min-width: 220px;
+      font-size: 0.8rem;
+      padding: 10px 12px;
+    }
+  
+    .music-title {
+      font-size: 0.8rem;
+      max-width: 120px;
+    }
+  
+    .music-icon {
+      font-size: 1.2rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .weather-widget {
+      position: relative;
+      bottom: 260px;
+      left: auto;
+      margin-top: 20px;
+      min-width: auto;
+      width: 100%;
+      max-width: 300px;
+    }
+  
+    .settings-btn {
+      position: relative;
+      bottom: auto;
+      right: auto;
+      margin-top: 15px;
+    }
+  }
+  

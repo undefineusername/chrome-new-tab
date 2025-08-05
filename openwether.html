@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>울산 날씨</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    .weather {
+      font-size: 1.5em;
+      margin-top: 20px;
+      line-height: 2;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌦 울산 현재 날씨</h1>
+  <div class="weather">불러오는 중...</div>
+
+  <script>
+    const API_KEY = "8adb134e958c5708f199d69cde65b942"; // 너의 API 키
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=Ulsan,KR&appid=${API_KEY}&units=metric&lang=kr`;
+
+    fetch(url)
+      .then(res => {
+        if (!res.ok) throw new Error("네트워크 응답 오류");
+        return res.json();
+      })
+      .then(data => {
+        const temp = data.main.temp;
+        const desc = data.weather[0].description;
+        const humidity = data.main.humidity;
+        const wind = data.wind.speed;
+        const clouds = data.clouds.all;
+
+        const html = `
+          🌡 기온: ${temp}℃<br>
+          🌤 상태: ${desc}<br>
+          💨 풍속: ${wind} m/s<br>
+          💧 습도: ${humidity}%<br>
+          ☁️ 구름: ${clouds}%
+        `;
+
+        document.querySelector('.weather').innerHTML = html;
+      })
+      .catch(err => {
+        console.error(err);
+        document.querySelector('.weather').textContent = '날씨 정보를 불러올 수 없음';
+      });
+  </script>
+</body>
+</html>

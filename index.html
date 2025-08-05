@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>새 탭</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="main-container">
+    <!-- 왼쪽 운동 패널 -->
+    <div class="side-panel workout-panel">
+        <h3 class="panel-title">오늘의 운동</h3>
+        
+        <div class="workout-content">
+            <!-- 운동 데이터는 JavaScript에서 동적 생성 -->
+            <div id="workout-container"></div>
+            
+            <!-- 주말 휴식 -->
+            <div class="rest-day" id="weekend-rest" style="display: none;">
+                <h2>🌙</h2>
+                <h3>휴식일</h3>
+                <p>충분한 휴식을<br>취하세요</p>
+            </div>
+        </div>
+        
+        <!-- CD 플레이어 위젯 -->
+        <div class="cd-player-widget" id="cd-player-widget" title="음악 플레이어">
+            <div class="cd-container">
+                <div class="cd-disc" id="cd-disc">
+                    <div class="cd-center">
+                        <div class="cd-hole"></div>
+                        <div class="cd-label">
+                            <div class="cd-title" id="cd-title">♪</div>
+                        </div>
+                    </div>
+                    <div class="cd-reflection"></div>
+                </div>
+                <div class="cd-controls">
+                    <button class="cd-btn" id="cd-prev-btn" onclick="previousTrack()">⏮️</button>
+                    <button class="cd-btn cd-play-btn" id="cd-play-pause-btn" onclick="togglePlayPause()">▶️</button>
+                    <button class="cd-btn" id="cd-next-btn" onclick="nextTrack()">⏭️</button>
+                </div>
+            </div>
+            <div class="cd-info">
+                <div class="cd-track-info">
+                    <span class="cd-track-title" id="cd-track-title">음악을 선택하세요</span>
+                    <span class="cd-track-artist" id="cd-track-artist">아티스트</span>
+                </div>
+                <div class="cd-progress">
+                    <div class="cd-progress-bar">
+                        <div class="cd-progress-fill" id="cd-progress-fill"></div>
+                    </div>
+                    <div class="cd-time">
+                        <span id="cd-current-time">0:00</span>
+                        <span id="cd-total-time">0:00</span>
+                    </div>
+                </div>
+                <div class="cd-volume">
+                    <span class="cd-volume-icon">🔊</span>
+                    <input type="range" class="cd-volume-slider" id="cd-volume-slider" min="0" max="100" value="50" onchange="changeVolume()">
+                </div>
+            </div>
+            <input type="file" id="cd-music-file-input" accept="audio/*" style="display: none;" onchange="loadMusicFile(event)">
+            <button class="cd-file-btn" onclick="document.getElementById('cd-music-file-input').click()">📁</button>
+        </div>
+        
+        <!-- 날씨 위젯 -->
+        <div class="weather-widget" id="weather-widget" title="날씨 정보">
+            <div class="weather-main">
+                <span class="weather-icon" id="weather-icon">🌤️</span>
+                <span class="weather-temp" id="weather-temp">--°</span>
+                <span class="weather-desc" id="weather-desc">로딩중...</span>
+            </div>
+            <div class="weather-details">
+                <div class="weather-detail">
+                    <span class="weather-detail-icon">💧</span>
+                    <span id="weather-humidity">--%</span>
+                </div>
+                <div class="weather-detail">
+                    <span class="weather-detail-icon">💨</span>
+                    <span id="weather-wind">-- m/s</span>
+                </div>
+                <div class="weather-detail">
+                    <span class="weather-detail-icon">☁️</span>
+                    <span id="weather-clouds">--%</span>
+                </div>
+                <div class="weather-detail">
+                    <span class="weather-detail-icon">🌡️</span>
+                    <span id="weather-feels">--°</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 중앙 섹션 -->
+    <div class="center-section">
+        <div class="time-container">
+            <div class="main-time" id="main-time">00:00</div>
+            <div class="main-date" id="main-date">Loading...</div>
+        </div>
+        
+        <div class="search-container">
+            <input type="text" class="search-box" placeholder="Google 검색 또는 URL 입력" id="search-input">
+            <button class="search-btn" onclick="performSearch()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- 크롬 스타일 바로가기 -->
+        <div class="shortcuts-container">
+            <div class="shortcuts-grid" id="shortcuts-grid">
+                <!-- 바로가기들은 JavaScript에서 동적 생성 -->
+            </div>
+        </div>
+
+        <!-- 설정 버튼 -->
+        <div class="settings-btn" onclick="toggleSettings()" title="설정">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.22,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.22,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.68 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- 오른쪽 할일 패널 -->
+    <div class="side-panel todo-panel">
+        <h3 class="panel-title">오늘의 할일</h3>
+        
+        <div class="todo-input-container">
+            <input type="text" class="todo-input" placeholder="할일 입력..." id="todo-input">
+            <button class="add-btn" onclick="addTodo()">+</button>
+        </div>
+        
+        <div class="todo-list" id="todo-list"></div>
+    </div>
+</div>
+
+<!-- 바로가기 추가 모달 -->
+<div class="modal-overlay" id="add-shortcut-modal" onclick="hideAddShortcutModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <h3>바로가기 추가</h3>
+        <div class="modal-form">
+            <input type="text" id="shortcut-name" placeholder="사이트 이름" maxlength="10">
+            <input type="url" id="shortcut-url" placeholder="https://example.com">
+            <input type="text" id="shortcut-emoji" placeholder="이모지 (예: 🌟)" maxlength="2">
+            <div class="modal-buttons">
+                <button onclick="hideAddShortcutModal()">취소</button>
+                <button onclick="addShortcut()" class="primary">추가</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 설정 패널 -->
+<div class="settings-panel" id="settings-panel">
+    <div class="settings-header">
+        <h3>설정</h3>
+        <button onclick="toggleSettings()">×</button>
+    </div>
+    <div class="settings-content">
+        <div class="setting-item">
+            <label>배경 테마</label>
+            <select id="theme-select" onchange="changeTheme()">
+                <option value="dark">다크 모드</option>
+                <option value="light">라이트 모드</option>
+                <option value="auto">시스템 설정</option>
+            </select>
+        </div>
+        <div class="setting-item">
+            <label>검색 엔진</label>
+            <select id="search-engine" onchange="changeSearchEngine()">
+                <option value="google">Google</option>
+                <option value="bing">Bing</option>
+                <option value="duckduckgo">DuckDuckGo</option>
+                <option value="naver">Naver</option>
+            </select>
+        </div>
+        <div class="setting-item">
+            <label>날씨 위치</label>
+            <input type="text" id="weather-location" placeholder="도시명 (예: Seoul)" onchange="changeWeatherLocation()">
+        </div>
+        <div class="setting-item">
+            <label>바로가기 개수</label>
+            <select id="shortcuts-count" onchange="changeShortcutsCount()">
+                <option value="6">6개</option>
+                <option value="8" selected>8개</option>
+                <option value="10">10개</option>
+                <option value="12">12개</option>
+            </select>
+        </div>
+        <div class="setting-item">
+            <button onclick="resetAllData()" class="danger-btn">모든 데이터 초기화</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 전역 변수들
+    const state = {
+        todos: JSON.parse(localStorage.getItem('todos')) || [],
+        shortcuts: JSON.parse(localStorage.getItem('shortcuts')) || [],
+        settings: JSON.parse(localStorage.getItem('settings')) || {
+            theme: 'dark',
+            searchEngine: 'google',
+            weatherLocation: 'Ulsan,KR',
+            shortcutsCount: 8
+        },
+        currentAudio: null,
+        isPlaying: false,
+        currentTrackIndex: 0,
+        playlist: []
+    };
+
+    // 운동 데이터
+    const workoutData = {
+        'monday-workout': { name: '월요일', category: '하체 & 코어', exercises: [
+            { name: '스쿼트', reps: '3×15' },
+            { name: '런지', reps: '3×12' },
+            { name: '글루트 브리지', reps: '3×15' },
+            { name: '플랭크', reps: '3×30s' }
+        ]},
+        'tuesday-workout': { name: '화요일', category: '상체 & 코어', exercises: [
+            { name: '푸시업', reps: '3×12' },
+            { name: '인버티드 로우', reps: '3×10' },
+            { name: '슈퍼맨', reps: '3×15' },
+            { name: '사이드 플랭크', reps: '2×30s' }
+        ]},
+        'wednesday-workout': { name: '수요일', category: '전신 HIIT', exercises: [
+            { name: '버피', reps: '3×10' },
+            { name: '마운틴 클라이머', reps: '3×20' },
+            { name: '점핑 잭', reps: '3×30s' },
+            { name: '하이 니즈', reps: '3×20' }
+        ]},
+        'thursday-workout': { name: '목요일', category: '하체 & 코어', exercises: [
+            { name: '스쿼트', reps: '3×15' },
+            { name: '런지', reps: '3×12' },
+            { name: '글루트 브리지', reps: '3×15' },
+            { name: '플랭크', reps: '3×30s' }
+        ]},
+        'friday-workout': { name: '금요일', category: '상체 & 코어', exercises: [
+            { name: '푸시업', reps: '3×12' },
+            { name: '인버티드 로우', reps: '3×10' },
+            { name: '슈퍼맨', reps: '3×15' },
+            { name: '사이드 플랭크', reps: '2×30s' }
+        ]}
+    };
+
+    // 기본 바로가기 데이터
+    const defaultShortcuts = [
+        { name: 'YouTube', url: 'https://www.youtube.com', emoji: '📺', color: '#ff0000' },
+        { name: 'GitHub', url: 'https://github.com/undefineusername', emoji: '🐙', color: '#333333' },
+        { name: 'Gmail', url: 'https://www.gmail.com', emoji: '📧', color: '#ea4335' },
+        { name: 'Discord', url: 'https://discord.com/channels/@me', emoji: '💬', color: '#5865f2' }
+    ];
+
+    // 유틸리티 함수들
+    const utils = {
+        formatTime: (seconds) => {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+        },
+        
+        getRandomColor: () => {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff', '#5f27cd'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        },
+
+        getWeatherIcon: (main) => {
+            const iconMap = {
+                'Clear': '☀️', 'Clouds': '🌥️', 'Rain': '🌧️', 'Drizzle': '🌦️',
+                'Thunderstorm': '⛈️', 'Snow': '❄️', 'Mist': '🌫️', 'Fog': '🌫️', 'Haze': '🌫️'
+            };
+            return iconMap[main] || '🌤️';
+        },
+
+        saveToStorage: (key, data) => localStorage.setItem(key, JSON.stringify(data)),
+        
+        getFromStorage: (key, defaultValue = null) => {
+            try {
+                return JSON.parse(localStorage.getItem(key)) || defaultValue;
+            } catch {
+                return defaultValue;
+            }
+        }
+    };
+
+    // 시간 업데이트
+    function updateTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('ko-KR', { hour12: true, hour: '2-digit', minute: '2-digit' });
+        const dateString = now.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+        
+        document.getElementById('main-time').textContent = timeString;
+        document.getElementById('main-date').textContent = dateString;
+    }
+
+    // 날씨 기능
+    const weather = {
+        API_KEY: "8adb134e958c5708f199d69cde65b942",
+        
+        getUrl: () => `https://api.openweathermap.org/data/2.5/weather?q=${state.settings.weatherLocation}&appid=${weather.API_KEY}&units=metric&lang=kr`,
+        
+        async fetch() {
+            const cached = utils.getFromStorage('weather_cache', {});
+            const now = Date.now();
+
+            if (cached.timestamp && now - cached.timestamp < 10 * 60 * 1000) {
+                this.display(cached.data);
+                return;
+            }
+
+            try {
+                const res = await fetch(this.getUrl());
+                if (!res.ok) throw new Error("API 응답 오류");
+                const data = await res.json();
+                
+                utils.saveToStorage('weather_cache', { data, timestamp: now });
+                this.display(data);
+            } catch (e) {
+                console.error("날씨 불러오기 실패:", e);
+                document.getElementById('weather-temp').textContent = '오류';
+                document.getElementById('weather-desc').textContent = '날씨 정보 없음';
+            }
+        },
+
+        display(data) {
+            const elements = {
+                icon: document.getElementById('weather-icon'),
+                temp: document.getElementById('weather-temp'),
+                desc: document.getElementById('weather-desc'),
+                humidity: document.getElementById('weather-humidity'),
+                wind: document.getElementById('weather-wind'),
+                clouds: document.getElementById('weather-clouds'),
+                feels: document.getElementById('weather-feels')
+            };
+
+            elements.icon.textContent = utils.getWeatherIcon(data.weather[0].main);
+            elements.temp.textContent = Math.round(data.main.temp) + '°';
+            elements.desc.textContent = data.weather[0].description;
+            elements.humidity.textContent = data.main.humidity + '%';
+            elements.wind.textContent = data.wind.speed + ' m/s';
+            elements.clouds.textContent = data.clouds.all + '%';
+            elements.feels.textContent = Math.round(data.main.feels_like) + '°';
+        }
+    };
+
+    // MP3 플레이어 기능
+    const musicPlayer = {
+        loadFile(event) {
+            const file = event.target.files[0];
+            if (!file || !file.type.startsWith('audio/')) return;
+
+            if (state.currentAudio) state.currentAudio.pause();
+            
+            const url = URL.createObjectURL(file);
+            state.currentAudio = new Audio(url);
+            
+            const fileName = file.name.replace(/\.[^/.]+$/, "");
+            document.getElementById('cd-track-title').textContent = fileName;
+            document.getElementById('cd-track-artist').textContent = '로컬 파일';
+            
+            state.currentAudio.addEventListener('loadedmetadata', () => {
+                document.getElementById('cd-total-time').textContent = utils.formatTime(state.currentAudio.duration);
+            });
+            
+            state.currentAudio.addEventListener('timeupdate', this.updateProgress);
+            state.currentAudio.addEventListener('ended', () => nextTrack());
+            
+            state.currentAudio.volume = document.getElementById('cd-volume-slider').value / 100;
+        },
+
+        updateProgress() {
+            if (!state.currentAudio) return;
+            
+            const progress = (state.currentAudio.currentTime / state.currentAudio.duration) * 100;
+            document.getElementById('cd-progress-fill').style.width = progress + '%';
+            document.getElementById('cd-current-time').textContent = utils.formatTime(state.currentAudio.currentTime);
+        }
+    };
+
+    // 운동 기능
+    const workout = {
+        render() {
+            const container = document.getElementById('workout-container');
+            container.innerHTML = '';
+
+            Object.entries(workoutData).forEach(([id, data]) => {
+                const workoutDiv = document.createElement('div');
+                workoutDiv.className = 'workout-day';
+                workoutDiv.id = id;
+                workoutDiv.style.display = 'none';
+                
+                workoutDiv.innerHTML = `
+                    <div class="day-info">
+                        <div class="day-name">${data.name}</div>
+                        <div class="day-category">${data.category}</div>
+                    </div>
+                    <ul class="exercise-list">
+                        ${data.exercises.map(exercise => `
+                            <li class="exercise-item">
+                                <input type="checkbox" class="exercise-checkbox" onchange="updateProgress()">
+                                <span class="exercise-name">${exercise.name}</span>
+                                <span class="exercise-reps">${exercise.reps}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <div class="progress-text">0%</div>
+                `;
+                
+                container.appendChild(workoutDiv);
+            });
+        },
+
+        showToday() {
+            const today = new Date().getDay();
+            const workoutDays = ['weekend-rest', 'monday-workout', 'tuesday-workout', 'wednesday-workout', 'thursday-workout', 'friday-workout', 'weekend-rest'];
+            
+            document.querySelectorAll('.workout-day, .rest-day').forEach(card => {
+                card.style.display = 'none';
+            });
+            
+            const todayWorkout = document.getElementById(workoutDays[today]);
+            if (todayWorkout) {
+                todayWorkout.style.display = 'block';
+                updateProgress();
+            }
+        }
+    };
+
+    // 바로가기 기능
+    const shortcuts = {
+        render() {
+            const grid = document.getElementById('shortcuts-grid');
+            grid.innerHTML = '';
+
+            // 기본 바로가기들
+            defaultShortcuts.forEach(shortcut => {
+                const element = this.createElement(shortcut, true);
+                grid.appendChild(element);
+            });
+
+            // 사용자 바로가기들
+            state.shortcuts.forEach(shortcut => {
+                const element = this.createElement(shortcut, false);
+                grid.appendChild(element);
+            });
+
+            // 추가 버튼
+            const addButton = document.createElement('div');
+            addButton.className = 'shortcut-item add-shortcut';
+            addButton.onclick = showAddShortcutModal;
+            addButton.innerHTML = `
+                <div class="shortcut-icon add-icon"><span>+</span></div>
+                <span class="shortcut-name">추가</span>
+            `;
+            grid.appendChild(addButton);
+        },
+
+        createElement(shortcut, isDefault) {
+            const element = document.createElement('div');
+            element.className = 'shortcut-item';
+            if (isDefault) element.classList.add('default-shortcut');
+            if (!isDefault) element.dataset.id = shortcut.id;
+            element.onclick = () => window.open(shortcut.url, '_blank');
+            
+            element.innerHTML = `
+                <div class="shortcut-icon" style="background-color: ${shortcut.color};">
+                    <span>${shortcut.emoji}</span>
+                </div>
+                <span class="shortcut-name">${shortcut.name}</span>
+                ${!isDefault ? '<button class="shortcut-delete" onclick="event.stopPropagation(); deleteShortcut(this)">×</button>' : ''}
+            `;
+            
+            return element;
+        }
+    };
+
+    // 할일 기능
+    const todos = {
+        render() {
+            const todoList = document.getElementById('todo-list');
+            todoList.innerHTML = '';
+            
+            state.todos.forEach(todo => {
+                const todoItem = document.createElement('div');
+                todoItem.className = `todo-item ${todo.completed ? 'completed' : ''}`;
+                
+                todoItem.innerHTML = `
+                    <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''} 
+                           onchange="toggleTodo(${todo.id})">
+                    <span class="todo-text">${todo.text}</span>
+                    <button class="delete-btn" onclick="deleteTodo(${todo.id})">×</button>
+                `;
+                
+                todoList.appendChild(todoItem);
+            });
+        },
+
+        add() {
+            const input = document.getElementById('todo-input');
+            const text = input.value.trim();
+            
+            if (text) {
+                const todo = { id: Date.now(), text, completed: false };
+                state.todos.push(todo);
+                utils.saveToStorage('todos', state.todos);
+                this.render();
+                input.value = '';
+            }
+        },
+
+        toggle(id) {
+            state.todos = state.todos.map(todo => 
+                todo.id === id ? { ...todo, completed: !todo.completed } : todo
+            );
+            utils.saveToStorage('todos', state.todos);
+            this.render();
+        },
+
+        delete(id) {
+            state.todos = state.todos.filter(todo => todo.id !== id);
+            utils.saveToStorage('todos', state.todos);
+            this.render();
+        }
+    };
+
+    // 이벤트 핸들러들
+    function loadMusicFile(event) { musicPlayer.loadFile(event); }
+    
+    function togglePlayPause() {
+        if (!state.currentAudio) {
+            alert('먼저 음악 파일을 선택해주세요.');
+            return;
+        }
+        
+        const cdDisc = document.getElementById('cd-disc');
+        const playBtn = document.getElementById('cd-play-pause-btn');
+        
+        if (state.isPlaying) {
+            state.currentAudio.pause();
+            playBtn.textContent = '▶️';
+            cdDisc.classList.remove('spinning');
+            state.isPlaying = false;
+        } else {
+            state.currentAudio.play();
+            playBtn.textContent = '⏸️';
+            cdDisc.classList.add('spinning');
+            state.isPlaying = true;
+        }
+    }
+
+    function previousTrack() {
+        if (state.currentAudio) state.currentAudio.currentTime = 0;
+    }
+
+    function nextTrack() {
+        if (state.currentAudio) {
+            state.currentAudio.currentTime = 0;
+            if (state.isPlaying) state.currentAudio.play();
+        }
+    }
+
+    function changeVolume() {
+        const volume = document.getElementById('cd-volume-slider').value / 100;
+        if (state.currentAudio) state.currentAudio.volume = volume;
+    }
+
+    function updateProgress() {
+        const visibleCard = document.querySelector('.workout-day[style*="block"]');
+        if (!visibleCard) return;
+        
+        const checkboxes = visibleCard.querySelectorAll('.exercise-checkbox');
+        const checkedBoxes = visibleCard.querySelectorAll('.exercise-checkbox:checked');
+        const progress = Math.round((checkedBoxes.length / checkboxes.length) * 100);
+        
+        const progressFill = visibleCard.querySelector('.progress-fill');
+        const progressText = visibleCard.querySelector('.progress-text');
+        
+        if (progressFill) progressFill.style.width = progress + '%';
+        if (progressText) progressText.textContent = progress + '%';
+        
+        checkboxes.forEach(checkbox => {
+            const exerciseItem = checkbox.closest('.exercise-item');
+            exerciseItem.classList.toggle('completed', checkbox.checked);
+        });
+    }
+
+    function performSearch() {
+        const query = document.getElementById('search-input').value.trim();
+        if (!query) return;
+
+        const searchEngines = {
+            google: `https://www.google.com/search?q=${encodeURIComponent(query)}`,
+            bing: `https://www.bing.com/search?q=${encodeURIComponent(query)}`,
+            duckduckgo: `https://duckduckgo.com/?q=${encodeURIComponent(query)}`,
+            naver: `https://search.naver.com/search.naver?query=${encodeURIComponent(query)}`
+        };
+
+        const url = query.includes('.') && !query.includes(' ') 
+            ? (query.startsWith('http') ? query : 'https://' + query)
+            : searchEngines[state.settings.searchEngine] || searchEngines.google;
+            
+        window.location.href = url;
+    }
+
+    function showAddShortcutModal() {
+        document.getElementById('add-shortcut-modal').style.display = 'flex';
+        document.getElementById('shortcut-name').focus();
+    }
+
+    function hideAddShortcutModal() {
+        document.getElementById('add-shortcut-modal').style.display = 'none';
+        ['shortcut-name', 'shortcut-url', 'shortcut-emoji'].forEach(id => {
+            document.getElementById(id).value = '';
+        });
+    }
+
+    function addShortcut() {
+        const name = document.getElementById('shortcut-name').value.trim();
+        const url = document.getElementById('shortcut-url').value.trim();
+        const emoji = document.getElementById('shortcut-emoji').value.trim() || '🌐';
+
+        if (!name || !url) {
+            alert('이름과 URL을 모두 입력해주세요.');
+            return;
+        }
+
+        const shortcut = { id: Date.now(), name, url, emoji, color: utils.getRandomColor() };
+        state.shortcuts.push(shortcut);
+        utils.saveToStorage('shortcuts', state.shortcuts);
+        shortcuts.render();
+        hideAddShortcutModal();
+    }
+
+    function deleteShortcut(button) {
+        const shortcutId = parseInt(button.closest('.shortcut-item').dataset.id);
+        state.shortcuts = state.shortcuts.filter(s => s.id !== shortcutId);
+        utils.saveToStorage('shortcuts', state.shortcuts);
+        shortcuts.render();
+    }
+
+    function addTodo() { todos.add(); }
+    function toggleTodo(id) { todos.toggle(id); }
+    function deleteTodo(id) { todos.delete(id); }
+
+    function toggleSettings() {
+        document.getElementById('settings-panel').classList.toggle('active');
+    }
+
+    function changeTheme() {
+        state.settings.theme = document.getElementById('theme-select').value;
+        utils.saveToStorage('settings', state.settings);
+        applyTheme();
+    }
+
+    function applyTheme() {
+        const body = document.body;
+        if (state.settings.theme === 'light') {
+            body.classList.add('light-theme');
+        } else if (state.settings.theme === 'dark') {
+            body.classList.remove('light-theme');
+        } else {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            body.classList.toggle('light-theme', !prefersDark);
+        }
+    }
+
+    function changeSearchEngine() {
+        state.settings.searchEngine = document.getElementById('search-engine').value;
+        utils.saveToStorage('settings', state.settings);
+    }
+
+    function changeWeatherLocation() {
+        const location = document.getElementById('weather-location').value.trim();
+        if (location) {
+            state.settings.weatherLocation = location;
+            utils.saveToStorage('settings', state.settings);
+            localStorage.removeItem('weather_cache');
+            weather.fetch();
+        }
+    }
+
+    function changeShortcutsCount() {
+        state.settings.shortcutsCount = parseInt(document.getElementById('shortcuts-count').value);
+        utils.saveToStorage('settings', state.settings);
+        updateShortcutsGrid();
+    }
+
+    function updateShortcutsGrid() {
+        const grid = document.getElementById('shortcuts-grid');
+        grid.style.gridTemplateColumns = `repeat(${Math.min(state.settings.shortcutsCount, 6)}, 1fr)`;
+    }
+
+    function resetAllData() {
+        if (confirm('모든 데이터를 초기화하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+            localStorage.clear();
+            location.reload();
+        }
+    }
+
+    function loadSettings() {
+        document.getElementById('theme-select').value = state.settings.theme;
+        document.getElementById('search-engine').value = state.settings.searchEngine;
+        document.getElementById('weather-location').value = state.settings.weatherLocation.split(',')[0];
+        document.getElementById('shortcuts-count').value = state.settings.shortcutsCount;
+        
+        applyTheme();
+        updateShortcutsGrid();
+    }
+
+    // 키보드 이벤트
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 'k') {
+            e.preventDefault();
+            document.getElementById('search-input').focus();
+        }
+        
+        if (e.ctrlKey && e.shiftKey && e.key === 'S') {
+            e.preventDefault();
+            toggleSettings();
+        }
+        
+        if (e.code === 'Space' && e.target.tagName !== 'INPUT') {
+            e.preventDefault();
+            togglePlayPause();
+        }
+        
+        if (e.key === 'Escape') {
+            hideAddShortcutModal();
+            const settingsPanel = document.getElementById('settings-panel');
+            if (settingsPanel.classList.contains('active')) {
+                toggleSettings();
+            }
+        }
+    });
+
+    // Enter 키 이벤트들
+    ['search-input', 'todo-input'].forEach(id => {
+        document.getElementById(id).addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                if (id === 'search-input') performSearch();
+                else addTodo();
+            }
+        });
+    });
+
+    // 바로가기 모달 Enter 키 체인
+    const modalInputs = ['shortcut-name', 'shortcut-url', 'shortcut-emoji'];
+    modalInputs.forEach((id, index) => {
+        document.getElementById(id).addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                if (index < modalInputs.length - 1) {
+                    document.getElementById(modalInputs[index + 1]).focus();
+                } else {
+                    addShortcut();
+                }
+            }
+        });
+    });
+
+    // 초기화
+    window.addEventListener('load', () => {
+        updateTime();
+        weather.fetch();
+        workout.render();
+        workout.showToday();
+        todos.render();
+        shortcuts.render();
+        loadSettings();
+        
+        setInterval(updateTime, 1000);
+    });
+</script>
+</body>
+</html>

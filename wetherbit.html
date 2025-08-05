@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>울산 현재 날씨</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 50px;
+  }
+  .weather {
+    font-size: 2em;
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+  <h1>🌤 울산 현재 기온</h1>
+  <div class="weather">불러오는 중...</div>
+
+  <script>
+    const apiKey = "598ad1f180b642b7bc2f3118a56fbb32"; // 너가 준 Weatherbit API 키
+    const city = "Ulsan";
+
+    const url = `https://api.weatherbit.io/v2.0/current?city=${city}&key=${apiKey}&lang=kr`;
+
+    fetch(url)
+      .then(res => {
+        if (!res.ok) throw new Error('네트워크 응답 오류');
+        return res.json();
+      })
+      .then(data => {
+        if (!data.data || data.data.length === 0) throw new Error('날씨 데이터가 없습니다');
+        const temp = data.data[0].temp;
+        document.querySelector('.weather').textContent = `${temp}℃`;
+      })
+      .catch(err => {
+        console.error(err);
+        document.querySelector('.weather').textContent = '날씨 정보를 불러올 수 없습니다.';
+      });
+  </script>
+</body>
+</html>

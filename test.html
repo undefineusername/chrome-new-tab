@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="test.css">
+</head>
+<body>
+    <!-- 🎵 MP3 플레이어 위젯 -->
+    <div class="music-widget" id="music-widget" title="음악 플레이어">
+        <div class="music-main">
+            <span class="music-icon" id="music-icon">🎵</span>
+            <span class="music-title" id="music-title">음악 선택</span>
+            <button class="music-play-btn" id="play-btn" onclick="togglePlay()">▶️</button>
+        </div>
+        <div class="music-controls">
+            <button class="music-control-btn" onclick="previousTrack()">⏮️</button>
+            <div class="music-progress">
+                <div class="progress-track">
+                    <div class="progress-bar-music" id="progress-bar"></div>
+                </div>
+                <div class="music-time">
+                    <span id="current-time">0:00</span>
+                    <span id="total-time">0:00</span>
+                </div>
+            </div>
+            <button class="music-control-btn" onclick="nextTrack()">⏭️</button>
+        </div>
+        <input type="file" id="music-file-input" accept="audio/*" multiple style="display: none;" onchange="loadMusicFiles(event)">
+        <button class="music-upload-btn" onclick="document.getElementById('music-file-input').click()">📁</button>
+    </div>
+
+    <!-- 🌦️ 날씨 위젯 -->
+    <div class="weather-widget" id="weather-widget" title="날씨 정보">
+        <h2>오늘의 날씨</h2>
+        <p id="weather-info">로딩 중...</p>
+    </div>
+
+    <script>
+        let currentAudio = null;
+        let playlist = [];
+        let currentTrackIndex = 0;
+        let isPlaying = false;
+
+        function loadMusicFiles(event) {
+            const files = Array.from(event.target.files);
+            
+            files.forEach(file => {
+                if (file.type.startsWith('audio/')) {
+                    const url = URL.createObjectURL(file);
+                    playlist.push({
+                        name: file.name.replace(/\.[^/.]+$/, ""), // 확장자 제거
+                        url: url,
+                        file: file
+                    });
+                }
+            });
+            
+            if (playlist.length > 0 && !currentAudio) {
+                loadTrack(0);
+            }
+            
+            updateMusicDisplay();
+        }
+
+        function loadTrack(index) {
+            if (index < 0 || index >= playlist.length) return;
+            
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio = null;
+            }
+            
+            currentTrackIndex = index;
+            const track = playlist[currentTrackIndex];
+            
+            currentAudio = new Audio(track.url);
+            currentAudio.addEventListener('loadedmetadata', updateDuration);
+            currentAudio.addEventListener('timeupdate', updateProgress);
+            currentAudio.addEventListener('ended', nextTrack);
+            
+            updateMusicDisplay();
+        }
+
+        function togglePlay() {
+            if (!currentAudio) {
+                if (playlist.length === 0) {
+                    alert('먼저 음악 파일을 업로드해주세요!');
+                    return;
+                }
+                loadTrack(0);
+                return;
+            }
+            
+            if (isPlaying) {
+                currentAudio.pause();
+                isPlaying = false;
+                document.getElementById('play-btn').textContent = '▶️';
+            } else {
+                currentAudio.play();
+                isPlaying = true;
+                document.getElementById('play-btn').textContent = '⏸️';
+            }
+        }
+
+        function previousTrack() {
+            if (playlist.length === 0) return;
+            
+            const newIndex = currentTrackIndex > 0 ? currentTrackIndex - 1 : playlist.length - 1;
+            loadTrack(newIndex);
+            
+            if (isPlaying) {
+                setTimeout(() => {
+                    currentAudio.play();
+                }, 100);
+            }
+        }
+
+        function nextTrack() {
+            if (playlist.length === 0) return;
+            
+            const newIndex = currentTrackIndex < playlist.length - 1 ? currentTrackIndex + 1 : 0;
+            loadTrack(newIndex);
+            
+            if (isPlaying) {
+                setTimeout(() => {
+                    currentAudio.play();
+                }, 100);
+            }
+        }
+
+        function updateMusicDisplay() {
+            const titleElement = document.getElementById('music-title');
+            const iconElement = document.getElementById('music-icon');
+            
+            if (playlist.length === 0) {
+                titleElement.textContent = '음악 선택';
+                iconElement.textContent = '🎵';
+            } else {
+                const track = playlist[currentTrackIndex];
+                titleElement.textContent = track.name;
+                iconElement.textContent = isPlaying ? '🎶' : '🎵';
+            }
+        }
+
+        function updateDuration() {
+            if (!currentAudio) return;
+            
+            const duration = currentAudio.duration;
+            const minutes = Math.floor(duration / 60);
+            const seconds = Math.floor(duration % 60);
+            
+            document.getElementById('total-time').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function updateProgress() {
+            if (!currentAudio) return;
+            
+            const current = currentAudio.currentTime;
+            const duration = currentAudio.duration;
+            const progress = (current / duration) * 100;
+            
+            document.getElementById('progress-bar').style.width = progress + '%';
+            
+            const minutes = Math.floor(current / 60);
+            const seconds = Math.floor(current % 60);
+            
+            document.getElementById('current-time').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // 프로그레스 바 클릭으로 시간 이동
+        document.addEventListener('DOMContentLoaded', function() {
+            const progressTrack = document.querySelector('.progress-track');
+            if (progressTrack) {
+                progressTrack.addEventListener('click', function(e) {
+                    if (!currentAudio) return;
+                    
+                    const rect = this.getBoundingClientRect();
+                    const clickX = e.clientX - rect.left;
+                    const width = rect.width;
+                    const percentage = clickX / width;
+                    
+                    currentAudio.currentTime = currentAudio.duration * percentage;
+                });
+            }
+        });
+    </script>
+</body>
+</html>
